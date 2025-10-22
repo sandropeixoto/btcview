@@ -1,0 +1,40 @@
+/* Tema Minimalista Elegante para o Bitcoin Frame */
+:root {
+  --color-bg: #000000;
+  --color-text: #f5f5f5;
+  --color-muted: #9ea2a8;
+  --color-accent: #f0c674;
+  --color-up: #00d084;
+  --color-down: #ff5f56;
+  --font-display: 'Orbitron', sans-serif;
+  --font-numeric: 'Roboto Mono', 'Courier New', monospace;
+  --glow-color: rgba(240, 198, 116, 0.55);
+  --shadow-soft: 0 25px 60px rgba(0, 0, 0, 0.65);
+}
+
+.theme-minimal {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-display);
+}
+
+.theme-minimal .btc-symbol {
+  color: var(--color-accent);
+  text-shadow: 0 0 18px var(--glow-color), 0 0 45px rgba(240, 198, 116, 0.3);
+}
+
+.theme-minimal .frame__price-value {
+  color: var(--color-text);
+}
+
+.theme-minimal .frame__change-value.is-up {
+  color: var(--color-up);
+}
+
+.theme-minimal .frame__change-value.is-down {
+  color: var(--color-down);
+}
+
+.theme-minimal .frame__status-text {
+  color: var(--color-muted);
+}
