@@ -6,6 +6,32 @@
 (function () {
   const REFRESH_INTERVAL = 5000; // ms
   const DEFAULT_CURRENCY = 'brl';
+  const utils = (typeof globalThis !== 'undefined' && globalThis.BTCViewUtils) || {};
+  const formatPercentage =
+    typeof utils.formatPercentage === 'function'
+      ? utils.formatPercentage
+      : (value) => {
+          if (typeof value !== 'number' || Number.isNaN(value)) return '--';
+          const sign = value > 0 ? '+' : '';
+          return `${sign}${value.toFixed(2)}%`;
+        };
+  const getDirection =
+    typeof utils.getDirection === 'function'
+      ? utils.getDirection
+      : (current, previous) => {
+          if (typeof current !== 'number' || Number.isNaN(current)) return 'neutral';
+          if (typeof previous !== 'number' || Number.isNaN(previous)) return 'neutral';
+          if (current > previous) return 'up';
+          if (current < previous) return 'down';
+          return 'neutral';
+        };
+  const getChangeDirection =
+    typeof utils.getChangeDirection === 'function'
+      ? utils.getChangeDirection
+      : (value) => {
+          if (typeof value !== 'number' || Number.isNaN(value) || value === 0) return 'neutral';
+          return value > 0 ? 'up' : 'down';
+        };
 
   const elements = {
     price: document.getElementById('btc-price'),
@@ -39,31 +65,6 @@
   }
 
   /**
-   * Formata a porcentagem com uma casa decimal.
-   * @param {number|null} value
-   * @returns {string}
-   */
-  function formatPercentage(value) {
-    if (typeof value !== 'number' || Number.isNaN(value)) return '--';
-    const sign = value > 0 ? '+' : '';
-    return `${sign}${value.toFixed(2)}%`;
-  }
-
-  /**
-   * Determina direção de movimento do preço.
-   * @param {number} current
-   * @param {number|null} previous
-   * @returns {'up'|'down'|'neutral'}
-   */
-  function getDirection(current, previous) {
-    if (typeof current !== 'number' || Number.isNaN(current)) return 'neutral';
-    if (typeof previous !== 'number' || Number.isNaN(previous)) return 'neutral';
-    if (current > previous) return 'up';
-    if (current < previous) return 'down';
-    return 'neutral';
-  }
-
-  /**
    * Atualiza o layout com a cotação fornecida.
    * @param {object} quote
    * @param {object} options
@@ -86,7 +87,7 @@
 
     if (typeof change === 'number') {
       elements.change.textContent = formatPercentage(change);
-      const changeDirection = change > 0 ? 'up' : change < 0 ? 'down' : 'neutral';
+      const changeDirection = getChangeDirection(change);
       Effects.applyChangeBadge(elements.change, changeDirection);
     } else {
       elements.change.textContent = '--';

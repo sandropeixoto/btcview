@@ -3,18 +3,39 @@
  * Camada de acesso à API pública do CoinGecko com pequeno cache local.
  */
 
-const BitcoinAPI = (() => {
+(function (root, factory) {
+  const api = factory(root);
+
+  if (typeof module === 'object' && module.exports) {
+    module.exports = api;
+  }
+
+  if (root) {
+    root.BitcoinAPI = api;
+  }
+})(typeof globalThis !== 'undefined' ? globalThis : this, function (root) {
   const API_URL = 'https://api.coingecko.com/api/v3/simple/price';
   const STORAGE_KEY = 'bitcoinFrame:lastQuote';
 
+  const fetchImpl = root?.fetch ? root.fetch.bind(root) : null;
+  const storage = root?.localStorage ?? null;
+
+  function logWarning(message, error) {
+    if (typeof console !== 'undefined' && console.warn) {
+      console.warn(message, error);
+    }
+  }
+
   /**
    * Monta a URL com os parâmetros necessários para buscar as cotações.
+   * @param {string[]} currencies
    * @returns {string}
    */
-  function buildUrl() {
+  function buildUrl(currencies = ['usd', 'brl']) {
+    const list = Array.isArray(currencies) && currencies.length > 0 ? currencies : ['usd', 'brl'];
     const params = new URLSearchParams({
       ids: 'bitcoin',
-      vs_currencies: 'usd,brl',
+      vs_currencies: list.join(','),
       include_24hr_change: 'true'
     });
     return `${API_URL}?${params.toString()}`;
@@ -25,11 +46,12 @@ const BitcoinAPI = (() => {
    * @returns {object|null}
    */
   function getCachedQuote() {
+    if (!storage) return null;
     try {
-      const cached = localStorage.getItem(STORAGE_KEY);
+      const cached = storage.getItem(STORAGE_KEY);
       return cached ? JSON.parse(cached) : null;
     } catch (error) {
-      console.warn('[BitcoinAPI] Falha ao ler cache local:', error);
+      logWarning('[BitcoinAPI] Falha ao ler cache local:', error);
       return null;
     }
   }
@@ -39,45 +61,62 @@ const BitcoinAPI = (() => {
    * @param {object} quote
    */
   function cacheQuote(quote) {
+    if (!storage) return;
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(quote));
+      storage.setItem(STORAGE_KEY, JSON.stringify(quote));
     } catch (error) {
-      console.warn('[BitcoinAPI] Falha ao salvar cache local:', error);
+      logWarning('[BitcoinAPI] Falha ao salvar cache local:', error);
     }
+  }
+
+  function toNumberOrNull(value) {
+    if (typeof value === 'number' && !Number.isNaN(value)) return value;
+    const parsed = typeof value === 'string' ? Number(value) : NaN;
+    return Number.isNaN(parsed) ? null : parsed;
   }
 
   /**
    * Normaliza o payload recebido da API do CoinGecko.
    * @param {object} data
+   * @param {number} [timestamp]
    * @returns {object}
    */
-  function normalizePayload(data) {
-    const btc = data?.bitcoin ?? {};
-    const now = Date.now();
+  function normalizePayload(data, timestamp = Date.now()) {
+    const btc = data && typeof data === 'object' ? data.bitcoin ?? {} : {};
+    const safeTimestamp = typeof timestamp === 'number' && !Number.isNaN(timestamp) ? timestamp : Date.now();
+
     return {
-      timestamp: now,
+      timestamp: safeTimestamp,
       prices: {
-        brl: btc.brl ?? null,
-        usd: btc.usd ?? null
+        brl: toNumberOrNull(btc.brl),
+        usd: toNumberOrNull(btc.usd)
       },
       change24h: {
-        brl: btc.brl_24h_change ?? null,
-        usd: btc.usd_24h_change ?? null
+        brl: toNumberOrNull(btc.brl_24h_change),
+        usd: toNumberOrNull(btc.usd_24h_change)
       }
     };
   }
 
   /**
    * Faz a requisição à API do CoinGecko e retorna os dados normalizados.
+   * @param {object} [options]
+   * @param {string[]} [options.currencies]
    * @returns {Promise<object>}
    */
-  async function fetchQuote() {
-    const response = await fetch(buildUrl(), {
+  async function fetchQuote({ currencies } = {}) {
+    if (!fetchImpl) {
+      throw new Error('[BitcoinAPI] fetch não está disponível no ambiente atual');
+    }
+
+    const response = await fetchImpl(buildUrl(currencies), {
       cache: 'no-store'
     });
+
     if (!response.ok) {
       throw new Error(`Erro na API (${response.status})`);
     }
+
     const payload = await response.json();
     const quote = normalizePayload(payload);
     cacheQuote(quote);
@@ -88,8 +127,8 @@ const BitcoinAPI = (() => {
     fetchQuote,
     getCachedQuote,
     cacheQuote,
+    normalizePayload,
+    buildUrl,
     STORAGE_KEY
   };
-})();
-
-window.BitcoinAPI = BitcoinAPI;
+});
