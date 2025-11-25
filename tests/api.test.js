@@ -11,8 +11,9 @@ test('buildUrl monta parâmetros padrão corretamente', () => {
   assert.ok(url.includes('include_24hr_change=true'));
 });
 
-test('buildUrl aceita lista personalizada de moedas', () => {
-  const url = BitcoinAPI.buildUrl(['eur', 'brl']);
+test('buildUrl aceita lista personalizada de moedas e coinId', () => {
+  const url = BitcoinAPI.buildUrl({ currencies: ['eur', 'brl'], coinId: 'ethereum' });
+  assert.ok(url.includes('ids=ethereum'));
   assert.ok(url.includes('vs_currencies=eur%2Cbrl') || url.includes('vs_currencies=eur,brl'));
 });
 
@@ -26,10 +27,15 @@ test('normalizePayload normaliza valores numéricos e converte strings', () => {
         brl_24h_change: -1.11
       }
     },
-    1700000000000
+    {
+      timestamp: 1700000000000,
+      currencies: ['usd', 'brl'],
+      coinId: 'bitcoin'
+    }
   );
 
   assert.deepEqual(result, {
+    coinId: 'bitcoin',
     timestamp: 1700000000000,
     prices: {
       usd: 12345.67,
@@ -43,7 +49,8 @@ test('normalizePayload normaliza valores numéricos e converte strings', () => {
 });
 
 test('normalizePayload retorna null quando dados estão ausentes', () => {
-  const result = BitcoinAPI.normalizePayload({});
+  const result = BitcoinAPI.normalizePayload({}, { currencies: ['brl', 'usd'] });
+  assert.equal(result.coinId, 'bitcoin');
   assert.equal(result.prices.brl, null);
   assert.equal(result.prices.usd, null);
   assert.equal(result.change24h.brl, null);
@@ -51,7 +58,22 @@ test('normalizePayload retorna null quando dados estão ausentes', () => {
 });
 
 test('normalizePayload garante timestamp numérico mesmo com entrada inválida', () => {
-  const result = BitcoinAPI.normalizePayload({ bitcoin: {} }, 'invalid');
+  const result = BitcoinAPI.normalizePayload({ bitcoin: {} }, { timestamp: 'invalid' });
   assert.equal(typeof result.timestamp, 'number');
   assert.ok(!Number.isNaN(result.timestamp));
+});
+
+test('normalizePayload respeita o coinId fornecido quando disponível', () => {
+  const result = BitcoinAPI.normalizePayload(
+    {
+      ethereum: {
+        usd: 500,
+        usd_24h_change: 1
+      }
+    },
+    { coinId: 'ethereum', currencies: ['usd'] }
+  );
+
+  assert.equal(result.coinId, 'ethereum');
+  assert.equal(result.prices.usd, 500);
 });

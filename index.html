@@ -23,15 +23,31 @@
 <body class="theme-minimal">
   <main class="frame" role="main">
     <header class="frame__header">
-      <div class="frame__logo" aria-hidden="true">
-        <span class="btc-symbol">₿</span>
-        <img src="assets/logo-btc.svg" alt="Logotipo Bitcoin" class="btc-icon" />
+      <div class="frame__branding">
+        <div class="frame__logo" aria-hidden="true">
+          <span class="btc-symbol">₿</span>
+          <img src="assets/logo-btc.svg" alt="Logotipo Bitcoin" class="btc-icon" />
+        </div>
+        <h1 class="frame__title">Bitcoin Frame</h1>
       </div>
-      <h1 class="frame__title">Bitcoin Frame</h1>
+      <div class="frame__controls" aria-label="Preferências de exibição">
+        <div class="control">
+          <span class="control__label">Ativo</span>
+          <select id="coin-select" class="control__select" aria-label="Escolher cripto"></select>
+        </div>
+        <div class="control">
+          <span class="control__label">Moeda</span>
+          <div id="currency-toggle" class="pill-group" role="group" aria-label="Escolher moeda">
+            <button type="button" class="pill is-active" data-currency="brl" aria-pressed="true">BRL</button>
+            <button type="button" class="pill" data-currency="usd" aria-pressed="false">USD</button>
+          </div>
+        </div>
+      </div>
     </header>
 
     <section class="frame__price" aria-live="polite">
       <p class="frame__price-label">Cotação agora</p>
+      <p id="coin-label" class="frame__asset">BTC</p>
       <p id="btc-price" class="frame__price-value" data-value="0">--</p>
       <p id="btc-currency" class="frame__currency">BRL</p>
     </section>
