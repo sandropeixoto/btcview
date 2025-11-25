@@ -3,46 +3,39 @@
  * Inicialização do Bitcoin Frame e orquestração da atualização das cotações.
  */
 
-(function () {
-  const REFRESH_INTERVAL = 5000; // ms
-  const DEFAULT_CURRENCY = 'brl';
-  const utils = (typeof globalThis !== 'undefined' && globalThis.BTCViewUtils) || {};
-  const formatPercentage =
-    typeof utils.formatPercentage === 'function'
-      ? utils.formatPercentage
-      : (value) => {
-          if (typeof value !== 'number' || Number.isNaN(value)) return '--';
-          const sign = value > 0 ? '+' : '';
-          return `${sign}${value.toFixed(2)}%`;
-        };
-  const getDirection =
-    typeof utils.getDirection === 'function'
-      ? utils.getDirection
-      : (current, previous) => {
-          if (typeof current !== 'number' || Number.isNaN(current)) return 'neutral';
-          if (typeof previous !== 'number' || Number.isNaN(previous)) return 'neutral';
-          if (current > previous) return 'up';
-          if (current < previous) return 'down';
-          return 'neutral';
-        };
-  const getChangeDirection =
-    typeof utils.getChangeDirection === 'function'
-      ? utils.getChangeDirection
-      : (value) => {
-          if (typeof value !== 'number' || Number.isNaN(value) || value === 0) return 'neutral';
-          return value > 0 ? 'up' : 'down';
-        };
+(function (root, factory) {
+  const app = factory(root);
 
-  const elements = {
-    price: document.getElementById('btc-price'),
-    change: document.getElementById('btc-change'),
-    currency: document.getElementById('btc-currency'),
-    clock: document.getElementById('last-update'),
-    statusText: document.querySelector('.frame__status-text')
+  if (typeof module === 'object' && module.exports) {
+    module.exports = app;
+  }
+
+  if (root) {
+    root.BTCViewApp = app;
+  }
+})(typeof globalThis !== 'undefined' ? globalThis : this, function (root) {
+  const config = (root && root.BTCViewConfig) || {
+    REFRESH_INTERVAL: 5000,
+    DEFAULT_CURRENCY: 'brl'
   };
+  const { formatPercentage, getDirection, getChangeDirection } =
+    (root && root.BTCViewUtils) || {};
+  const BitcoinAPI = (root && root.BitcoinAPI) || {};
+  const Effects = (root && root.Effects) || {};
+
+  const elements =
+    typeof document !== 'undefined'
+      ? {
+          price: document.getElementById('btc-price'),
+          change: document.getElementById('btc-change'),
+          currency: document.getElementById('btc-currency'),
+          clock: document.getElementById('last-update'),
+          statusText: document.querySelector('.frame__status-text')
+        }
+      : {};
 
   const state = {
-    currency: DEFAULT_CURRENCY,
+    currency: config.DEFAULT_CURRENCY,
     previousPrice: null,
     lastQuote: null
   };
@@ -117,6 +110,8 @@
       const fallback = BitcoinAPI.getCachedQuote();
       if (fallback) {
         renderQuote(fallback, { fromCache: true });
+      } else if (elements.statusText) {
+        elements.statusText.textContent = 'Falha ao carregar dados';
       }
     }
   }
@@ -137,14 +132,28 @@
 
     // Busca cotação inicial e agenda atualizações periódicas.
     fetchAndRender();
-    setInterval(fetchAndRender, REFRESH_INTERVAL);
+    setInterval(fetchAndRender, config.REFRESH_INTERVAL);
   }
 
-  document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) {
-      fetchAndRender();
-    }
-  });
+  if (typeof document !== 'undefined') {
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) {
+        fetchAndRender();
+      }
+    });
+  }
 
-  window.addEventListener('load', init);
-})();
+  if (typeof window !== 'undefined') {
+    window.addEventListener('load', init);
+  }
+
+  // Expõe funções para testes
+  return {
+    _state: state,
+    _elements: elements,
+    _currencyFormatter: currencyFormatter,
+    renderQuote,
+    fetchAndRender,
+    init
+  };
+});
