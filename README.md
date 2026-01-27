@@ -1,34 +1,43 @@
-# btcview
+# Bitcoin Frame (btcview)
 
-Aplicativo web responsivo pensado para porta-retratos digitais que exibe a cotação do Bitcoin em tempo real, com fallback para o último valor cacheado quando a conexão falha.
+Painel web *full-screen* minimalista projetado para transformar tablets, celulares ou monitores em porta-retratos digitais de criptomoedas. Focado em estética e prevenção de *burn-in* para telas OLED/AMOLED.
 
-## Funcionalidades
-- Consulta a API pública do CoinGecko e normaliza os dados para BRL e USD.
-- Atualização automática a cada 5 s e atualização imediata ao voltar ao foco (`visibilitychange`).
-- Exibição de variação percentual em 24 h com formatação consistente e indicação visual (cores, animação e áudio opcional).
-- Cache local (`localStorage`) das últimas cotações para uso offline ou em caso de erro na API.
-- Relógio local sempre em sincronia para indicar o horário da última atualização.
+## 🚀 Funcionalidades
 
-## Estrutura
-- `index.html`: layout principal e inclusão dos módulos JS.
-- `css/`: temas e estilos do visor.
-- `js/api.js`: camada de integração com o CoinGecko, preparada para testes e reutilização.
-- `js/main.js`: orquestração da UI (renderização, timers e gerenciamento de estado).
-- `js/utils/quote-utils.js`: utilidades puras para formatação e classificação da variação.
-- `js/effects.js`: efeitos visuais/sonoros aplicados aos elementos da UI.
-- `tests/`: suíte automatizada baseada em `node:test`.
+- **Multi-Ativos:** Monitoramento em tempo real de Bitcoin (BTC), Ethereum (ETH), Solana (SOL) e Ripple (XRP).
+- **Conversão Dinâmica:** Alternância instantânea entre BRL (R$) e USD ($).
+- **Modo Kiosk/Full-screen:** Oculta a interface do navegador e a barra de status com um clique na tela.
+- **Proteção de Tela (Pixel Shift):** Sistema de movimentação imperceptível dos elementos a cada ciclo para evitar *burn-in* em telas permanentes.
+- **PWA (Progressive Web App):** Instalável nativamente no Android e iOS, funcionando como um aplicativo independente.
+- **Feedback Visual:** Cores dinâmicas (Verde/Vermelho) e efeitos de brilho indicando a direção da variação de preço.
+- **API Gratuita:** Conexão direta com a API da CoinGecko (sem necessidade de chave de API).
 
-## Executando localmente
-1. Abra `index.html` em um navegador moderno. Não é necessário servidor, mas recomenda-se servir os arquivos (ex.: `python -m http.server`) para evitar políticas de CORS em ambientes restritos.
-2. Verifique o console do navegador para acompanhar logs de erros da API ou do cache.
+## 📂 Estrutura do Projeto
 
-## Testes automatizados
-Requer Node.js ≥ 20.
+- `index.html`: Estrutura semântica e ponto de entrada da aplicação.
+- `manifest.json`: Metadados para instalação como aplicativo (ícones, cores, orientação).
+- `sw.js`: Service Worker para cache de ativos e funcionamento offline/PWA.
+- `css/`:
+  - `style.css`: Estilização geral, animações de pixel shift e responsividade.
+  - `theme-minimal.css`: Paleta de cores e tipografia (Orbitron/Roboto).
+- `js/`:
+  - `config.js`: Lista de moedas disponíveis e configurações globais.
+  - `api.js`: Lógica de conexão e tratamento de erros da CoinGecko API.
+  - `main.js`: Controle de DOM, eventos de UI e ciclo de atualização.
+- `assets/`: Ícones e logos para o manifesto PWA.
 
-```bash
-node --test
-```
+## 🛠️ Como usar
 
-Os testes cobrem:
-- Normalização do payload do CoinGecko (`js/api.js`).
-- Regras de formatação e direção de mudança (`js/utils/quote-utils.js`).
+### Online (Recomendado)
+Acesse diretamente via GitHub Pages ou faça o deploy do repositório.
+1. Abra no navegador do seu tablet/celular.
+2. Adicione à tela de início (Instalar App).
+3. Abra o app instalado e toque na tela para entrar em modo imersivo.
+
+### Executando Localmente
+1. Clone o repositório.
+2. Como o projeto utiliza **Service Workers** e **Módulos ES6**, é necessário servir os arquivos via HTTP (não abra direto o arquivo file://).
+   
+   Com Python 3:
+   ```bash
+   python -m http.server 8000
