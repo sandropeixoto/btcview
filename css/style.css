@@ -1,354 +1,163 @@
-/* Bitcoin Frame - Estilos base e layout responsivo em modo paisagem */
-html,
-body {
-  height: 100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background: var(--color-bg);
-  color: var(--color-text);
+/* Layout Base */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden; /* Evita rolagem no fullscreen */
+    background-color: #000;
+    font-family: 'Orbitron', sans-serif;
+    color: #fff;
 }
 
-body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.frame {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh;
+    padding: 2rem;
+    box-sizing: border-box;
 }
 
-main.frame {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-rows: auto 1fr auto;
-  grid-template-areas:
-    'header header'
-    'price change'
-    'footer footer';
-  column-gap: 4vw;
-  row-gap: 2vh;
-  padding: 6vh 8vw;
-  width: 100vw;
-  height: 100vh;
-  box-sizing: border-box;
-  text-align: left;
-  box-shadow: var(--shadow-soft);
-}
-
+/* Header & Controles */
 .frame__header {
-  grid-area: header;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 2vw;
-  flex-wrap: wrap;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 }
 
 .frame__branding {
-  display: flex;
-  align-items: center;
-  gap: 2vw;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .frame__logo {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: clamp(4rem, 10vw, 6.5rem);
-  position: relative;
-}
-
-.btc-symbol {
-  display: inline-block;
-  animation: btcGlow 4s ease-in-out infinite;
-}
-
-.btc-icon {
-  width: clamp(48px, 8vw, 72px);
-  filter: drop-shadow(0 0 12px rgba(240, 198, 116, 0.35));
+    font-size: 2.5rem;
+    color: #f7931a;
+    text-shadow: 0 0 10px rgba(247, 147, 26, 0.5);
 }
 
 .frame__title {
-  font-weight: 500;
-  letter-spacing: 0.3rem;
-  font-size: clamp(1.2rem, 2.8vw, 2.3rem);
-  text-transform: uppercase;
-  opacity: 0.75;
-  margin: 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin: 0;
+    color: #888;
 }
 
 .frame__controls {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  justify-content: flex-end;
-  flex-wrap: wrap;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 }
 
-.control {
-  display: flex;
-<<<<<<< HEAD
-  flex-direction: column;
-  gap: 0.35rem;
-  text-align: left;
-}
-
-<<<<<<< HEAD
-/* Feedback de Preço */
-.price-up { color: #00ff88 !important; transition: color 0.3s; }
-.price-down { color: #ff4d4d !important; transition: color 0.3s; }
-=======
-  align-items: center;
-  justify-content: center;
-}
-
-main.frame {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-rows: auto 1fr auto;
-  grid-template-areas:
-    'header header'
-    'price change'
-    'footer footer';
-  column-gap: 4vw;
-  row-gap: 2vh;
-  padding: 6vh 8vw;
-  width: 100vw;
-  height: 100vh;
-  box-sizing: border-box;
-  text-align: left;
-  box-shadow: var(--shadow-soft);
-}
-
-.frame__header {
-  grid-area: header;
-  display: flex;
-  align-items: center;
-  gap: 2vw;
-}
-
-.frame__logo {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  font-size: clamp(4rem, 10vw, 6.5rem);
-  position: relative;
-}
-
-.btc-symbol {
-  display: inline-block;
-  animation: btcGlow 4s ease-in-out infinite;
-}
-
-.btc-icon {
-  width: clamp(48px, 8vw, 72px);
-  filter: drop-shadow(0 0 12px rgba(240, 198, 116, 0.35));
-}
-
-.frame__title {
-  font-weight: 500;
-  letter-spacing: 0.3rem;
-  font-size: clamp(1.2rem, 2.8vw, 2.3rem);
-  text-transform: uppercase;
-  opacity: 0.75;
-=======
-.control__label {
-  font-size: clamp(0.7rem, 1.4vw, 0.9rem);
-  letter-spacing: 0.2rem;
-  text-transform: uppercase;
-  opacity: 0.7;
-}
-
+/* Select Box Estilizado */
 .control__select {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--color-text);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 8px;
-  padding: 0.55rem 0.8rem;
-  min-width: 150px;
-  font-size: clamp(0.9rem, 1.8vw, 1rem);
-  font-family: inherit;
-  cursor: pointer;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    background: #1a1a1a;
+    color: #fff;
+    border: 1px solid #333;
+    padding: 0.5rem;
+    border-radius: 4px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1rem;
+    outline: none;
+    min-width: 120px; /* Garante que não fique invisível */
 }
 
-.control__select:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-}
-
+/* Botões USD/BRL */
 .pill-group {
-  display: flex;
-  gap: 0.5rem;
+    display: flex;
+    background: #1a1a1a;
+    border-radius: 4px;
+    overflow: hidden;
 }
 
 .pill {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--color-text);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 999px;
-  padding: 0.45rem 0.9rem;
-  font-size: clamp(0.9rem, 1.8vw, 1rem);
-  letter-spacing: 0.18rem;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: border-color 0.2s ease, transform 0.15s ease;
+    background: none;
+    border: none;
+    color: #666;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    font-family: 'Roboto Mono', monospace;
+    font-weight: bold;
 }
 
 .pill.is-active {
-  border-color: var(--color-accent);
-  box-shadow: 0 0 18px rgba(240, 198, 116, 0.25);
+    background: #333;
+    color: #fff;
 }
 
-.pill:active {
-  transform: translateY(1px);
->>>>>>> parent of 601c75e (refatorando)
-}
-
+/* Preço Principal */
 .frame__price {
-  grid-area: price;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+    text-align: left;
 }
 
 .frame__price-label {
-  font-size: clamp(1rem, 2vw, 1.4rem);
-  letter-spacing: 0.25rem;
-  text-transform: uppercase;
-  opacity: 0.6;
+    font-family: 'Roboto Mono', monospace;
+    color: #666;
+    margin: 0 0 1rem 0;
+    font-size: 0.9rem;
 }
 
-<<<<<<< HEAD
-=======
 .frame__asset {
-  font-size: clamp(1.1rem, 2.1vw, 1.5rem);
-  letter-spacing: 0.3rem;
-  opacity: 0.8;
-  margin: 0.2em 0 0;
-  text-transform: uppercase;
+    font-size: 1.5rem;
+    margin: 0;
+    color: #f7931a;
 }
 
->>>>>>> parent of 601c75e (refatorando)
 .frame__price-value {
-  font-family: var(--font-numeric);
-  font-size: clamp(3rem, 12vw, 8rem);
-  margin: 0.2em 0;
-  transition: color 0.5s ease;
-}
-
-.frame__price-value.fade {
-  animation: priceFade 0.5s ease forwards;
-}
-
-.frame__price-value.up {
-  color: var(--color-up);
-}
-
-.frame__price-value.down {
-  color: var(--color-down);
+    font-size: 6vw; /* Responsivo */
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.1;
+    transition: color 0.3s ease;
 }
 
 .frame__currency {
-  font-size: clamp(1rem, 2.5vw, 1.6rem);
-  letter-spacing: 0.6rem;
-  text-transform: uppercase;
-  opacity: 0.6;
+    font-size: 1.5rem;
+    color: #444;
+    margin: 0;
 }
 
+/* Variação 24h */
 .frame__change {
-  grid-area: change;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.8rem;
-  font-size: clamp(1.4rem, 3vw, 2.2rem);
+    text-align: right;
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 .frame__change-label {
-  text-transform: uppercase;
-  font-size: clamp(0.9rem, 1.6vw, 1.2rem);
-  letter-spacing: 0.3rem;
-  opacity: 0.6;
+    display: block;
+    font-family: 'Roboto Mono', monospace;
+    color: #666;
+    font-size: 0.8rem;
+    margin-bottom: 0.5rem;
 }
 
 .frame__change-value {
-  font-family: var(--font-numeric);
-  transition: color 0.5s ease;
+    font-size: 2rem;
+    font-weight: 700;
 }
 
+/* Footer */
 .frame__footer {
-  grid-area: footer;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  font-size: clamp(0.8rem, 1.4vw, 1.1rem);
-  letter-spacing: 0.1rem;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 0.8rem;
+    color: #444;
+    border-top: 1px solid #111;
+    padding-top: 1rem;
 }
 
-.frame__status {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.2rem;
+/* Feedback de Preço */
+.price-up { color: #00ff88; text-shadow: 0 0 15px rgba(0, 255, 136, 0.3); }
+.price-down { color: #ff4d4d; text-shadow: 0 0 15px rgba(255, 77, 77, 0.3); }
+
+/* Responsividade Mobile */
+@media (max-width: 768px) {
+    .frame__price-value { font-size: 15vw; }
+    .frame__change { position: static; transform: none; text-align: left; margin-top: 2rem; }
 }
-
-.frame__timestamp {
-  font-family: var(--font-numeric);
-  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-}
-
-@keyframes btcGlow {
-  0%,
-  100% {
-    text-shadow: 0 0 14px var(--glow-color), 0 0 24px rgba(240, 198, 116, 0.25);
-  }
-  50% {
-    text-shadow: 0 0 25px rgba(240, 198, 116, 0.8), 0 0 60px rgba(240, 198, 116, 0.4);
-  }
-}
-
-@keyframes priceFade {
-  from {
-    opacity: 0.3;
-    transform: scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@media (max-aspect-ratio: 4/5) {
-  /* Ajustes para telas que não estejam em paisagem */
-  main.frame {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      'header'
-      'price'
-      'change'
-      'footer';
-    padding: 4vh 6vw;
-    text-align: center;
-  }
-
-  .frame__header,
-  .frame__change,
-  .frame__footer {
-    justify-content: center;
-  }
-
-<<<<<<< HEAD
-=======
-  .frame__controls {
-    justify-content: center;
-  }
-
->>>>>>> parent of 601c75e (refatorando)
-  .frame__status {
-    align-items: center;
-  }
-}
-<<<<<<< HEAD
->>>>>>> parent of 178d4ac (feat: add support for multiple cryptocurrencies and improve UI controls)
-=======
->>>>>>> parent of 601c75e (refatorando)

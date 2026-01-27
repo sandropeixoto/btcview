@@ -1,19 +1,21 @@
-/**
- * config.js
- * Configurações centralizadas para o aplicativo Bitcoin Frame.
- */
-
 (function (root) {
-  const config = {
-    REFRESH_INTERVAL: 5000, // ms
-    DEFAULT_CURRENCY: 'brl'
-  };
+    const config = {
+        REFRESH_INTERVAL: 5000, // 5 segundos
+        DEFAULT_CURRENCY: 'brl',
+        DEFAULT_COIN: 'bitcoin',
+        AVAILABLE_CURRENCIES: ['brl', 'usd'],
+        AVAILABLE_COINS: [
+            { id: 'bitcoin', symbol: 'BTC', name: 'Bitcoin' },
+            { id: 'ethereum', symbol: 'ETH', name: 'Ethereum' },
+            { id: 'solana', symbol: 'SOL', name: 'Solana' }
+        ]
+    };
 
-  if (typeof module === 'object' && module.exports) {
-    module.exports = config;
-  }
+    if (typeof module === 'object' && module.exports) {
+        module.exports = config;
+    }
 
-  if (root) {
-    root.BTCViewConfig = config;
-  }
+    if (root) {
+        root.BTCViewConfig = config;
+    }
 })(typeof globalThis !== 'undefined' ? globalThis : this);

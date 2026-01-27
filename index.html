@@ -1,73 +1,66 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#000000" />
-  
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="BTC Frame" />
-  
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="description" content="Bitcoin Frame - Painel de Cripto em tempo real." />
-  
-  <title>Bitcoin Frame</title>
-  
-  <link rel="manifest" href="manifest.json" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet" />
-  
-  <link rel="stylesheet" href="css/theme-minimal.css" />
-  <link rel="stylesheet" href="css/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Bitcoin Frame - Painel Crypto" />
+    <title>Bitcoin Frame</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="css/theme-minimal.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    
+    <link rel="manifest" href="manifest.json" />
 </head>
 <body class="theme-minimal">
-  <main class="frame" id="main-frame" role="main">
-    <header class="frame__header">
-      <div class="frame__branding">
-        <div class="frame__logo">
-          <span class="btc-symbol">₿</span>
-        </div>
-        <h1 class="frame__title">Bitcoin Frame</h1>
-      </div>
-      <div class="frame__controls">
-        <div class="control">
-          <select id="coin-select" class="control__select" aria-label="Selecionar Criptomoeda"></select>
-        </div>
-        <div class="control">
-          <div id="currency-toggle" class="pill-group">
-            <button type="button" class="pill is-active" data-currency="brl">BRL</button>
-            <button type="button" class="pill" data-currency="usd">USD</button>
-          </div>
-        </div>
-      </div>
-    </header>
+    <main class="frame" role="main">
+        <header class="frame__header">
+            <div class="frame__branding">
+                <div class="frame__logo">
+                    <span class="btc-symbol">₿</span>
+                </div>
+                <h1 class="frame__title">Bitcoin Frame</h1>
+            </div>
+            
+            <div class="frame__controls">
+                <div class="control">
+                    <select id="coin-select" class="control__select" aria-label="Escolher Cripto"></select>
+                </div>
+                <div class="control">
+                    <div id="currency-toggle" class="pill-group">
+                        <button type="button" class="pill is-active" data-currency="brl">BRL</button>
+                        <button type="button" class="pill" data-currency="usd">USD</button>
+                    </div>
+                </div>
+            </div>
+        </header>
 
-    <section class="frame__price">
-      <p class="frame__price-label">Cotação agora</p>
-      <div class="price-container">
-          <p id="coin-label" class="frame__asset">BTC</p>
-          <p id="btc-price" class="frame__price-value" data-value="0">--</p>
-          <p id="btc-currency" class="frame__currency">BRL</p>
-      </div>
-    </section>
+        <section class="frame__price">
+            <p class="frame__price-label">Cotação agora</p>
+            <p id="coin-label" class="frame__asset">BTC</p>
+            <p id="btc-price" class="frame__price-value" data-value="0">--</p>
+            <p id="btc-currency" class="frame__currency">BRL</p>
+        </section>
 
-    <section class="frame__change">
-      <span class="frame__change-label">24h</span>
-      <span id="btc-change" class="frame__change-value">--</span>
-    </section>
+        <section class="frame__change">
+            <span class="frame__change-label">24h</span>
+            <span id="btc-change" class="frame__change-value">--</span>
+        </section>
 
-    <footer class="frame__footer">
-      <div class="frame__status">
-        <span id="last-update" class="frame__timestamp">--:--:--</span>
-        <span class="frame__status-text">Atualizado em tempo real</span>
-      </div>
-    </footer>
-  </main>
+        <footer class="frame__footer">
+            <div class="frame__status">
+                <span id="last-update" class="frame__timestamp">Carregando...</span>
+                <span class="frame__status-text">Atualizado em tempo real</span>
+            </div>
+        </footer>
+    </main>
 
-  <script src="js/config.js" defer></script>
-  <script src="js/api.js" defer></script>
-  <script src="js/main.js" defer></script>
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
