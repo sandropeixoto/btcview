@@ -1,27 +1,98 @@
-/* Efeito Anti Burn-in */
-@keyframes pixelShift {
-  0%   { transform: translate(0, 0); }
-  25%  { transform: translate(1px, 1px); }
-  50%  { transform: translate(-1px, 2px); }
-  75%  { transform: translate(-2px, -1px); }
-  100% { transform: translate(0, 0); }
+/* Bitcoin Frame - Estilos base e layout responsivo em modo paisagem */
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: var(--color-bg);
+  color: var(--color-text);
 }
 
-.frame {
-  animation: pixelShift 60s linear infinite;
-  will-change: transform;
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+main.frame {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    'header header'
+    'price change'
+    'footer footer';
+  column-gap: 4vw;
+  row-gap: 2vh;
+  padding: 6vh 8vw;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  text-align: left;
+  box-shadow: var(--shadow-soft);
+}
+
+.frame__header {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2vw;
+  flex-wrap: wrap;
+}
+
+.frame__branding {
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+}
+
+.frame__logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: clamp(4rem, 10vw, 6.5rem);
+  position: relative;
+}
+
+.btc-symbol {
+  display: inline-block;
+  animation: btcGlow 4s ease-in-out infinite;
+}
+
+.btc-icon {
+  width: clamp(48px, 8vw, 72px);
+  filter: drop-shadow(0 0 12px rgba(240, 198, 116, 0.35));
+}
+
+.frame__title {
+  font-weight: 500;
+  letter-spacing: 0.3rem;
+  font-size: clamp(1.2rem, 2.8vw, 2.3rem);
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin: 0;
+}
+
+.frame__controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.control {
   display: flex;
 <<<<<<< HEAD
   flex-direction: column;
-  justify-content: space-between;
-  height: 100vh;
-  padding: 2rem;
-  box-sizing: border-box;
-  background: #000;
-  color: #fff;
-  overflow: hidden;
+  gap: 0.35rem;
+  text-align: left;
 }
 
+<<<<<<< HEAD
 /* Feedback de Preço */
 .price-up { color: #00ff88 !important; transition: color 0.3s; }
 .price-down { color: #ff4d4d !important; transition: color 0.3s; }
@@ -79,6 +150,58 @@ main.frame {
   font-size: clamp(1.2rem, 2.8vw, 2.3rem);
   text-transform: uppercase;
   opacity: 0.75;
+=======
+.control__label {
+  font-size: clamp(0.7rem, 1.4vw, 0.9rem);
+  letter-spacing: 0.2rem;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.control__select {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-text);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  padding: 0.55rem 0.8rem;
+  min-width: 150px;
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.control__select:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.pill-group {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.pill {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--color-text);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  letter-spacing: 0.18rem;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s ease, transform 0.15s ease;
+}
+
+.pill.is-active {
+  border-color: var(--color-accent);
+  box-shadow: 0 0 18px rgba(240, 198, 116, 0.25);
+}
+
+.pill:active {
+  transform: translateY(1px);
+>>>>>>> parent of 601c75e (refatorando)
 }
 
 .frame__price {
@@ -95,6 +218,17 @@ main.frame {
   opacity: 0.6;
 }
 
+<<<<<<< HEAD
+=======
+.frame__asset {
+  font-size: clamp(1.1rem, 2.1vw, 1.5rem);
+  letter-spacing: 0.3rem;
+  opacity: 0.8;
+  margin: 0.2em 0 0;
+  text-transform: uppercase;
+}
+
+>>>>>>> parent of 601c75e (refatorando)
 .frame__price-value {
   font-family: var(--font-numeric);
   font-size: clamp(3rem, 12vw, 8rem);
@@ -203,8 +337,18 @@ main.frame {
     justify-content: center;
   }
 
+<<<<<<< HEAD
+=======
+  .frame__controls {
+    justify-content: center;
+  }
+
+>>>>>>> parent of 601c75e (refatorando)
   .frame__status {
     align-items: center;
   }
 }
+<<<<<<< HEAD
 >>>>>>> parent of 178d4ac (feat: add support for multiple cryptocurrencies and improve UI controls)
+=======
+>>>>>>> parent of 601c75e (refatorando)
