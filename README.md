@@ -4,7 +4,6 @@ Aplicativo web responsivo pensado para porta-retratos digitais que exibe a cota�
 
 ## Funcionalidades
 - Consulta a API pública do CoinGecko e normaliza os dados para BRL e USD.
-- Seleção rápida de moeda (BRL/USD) e ativo (BTC/ETH/SOL) com persistência local.
 - Atualização automática a cada 5 s e atualização imediata ao voltar ao foco (`visibilitychange`).
 - Exibição de variação percentual em 24 h com formatação consistente e indicação visual (cores, animação e áudio opcional).
 - Cache local (`localStorage`) das últimas cotações para uso offline ou em caso de erro na API.

@@ -11,6 +11,7 @@
   animation: pixelShift 60s linear infinite;
   will-change: transform;
   display: flex;
+<<<<<<< HEAD
   flex-direction: column;
   justify-content: space-between;
   height: 100vh;
@@ -24,3 +25,186 @@
 /* Feedback de Preço */
 .price-up { color: #00ff88 !important; transition: color 0.3s; }
 .price-down { color: #ff4d4d !important; transition: color 0.3s; }
+=======
+  align-items: center;
+  justify-content: center;
+}
+
+main.frame {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    'header header'
+    'price change'
+    'footer footer';
+  column-gap: 4vw;
+  row-gap: 2vh;
+  padding: 6vh 8vw;
+  width: 100vw;
+  height: 100vh;
+  box-sizing: border-box;
+  text-align: left;
+  box-shadow: var(--shadow-soft);
+}
+
+.frame__header {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  gap: 2vw;
+}
+
+.frame__logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: clamp(4rem, 10vw, 6.5rem);
+  position: relative;
+}
+
+.btc-symbol {
+  display: inline-block;
+  animation: btcGlow 4s ease-in-out infinite;
+}
+
+.btc-icon {
+  width: clamp(48px, 8vw, 72px);
+  filter: drop-shadow(0 0 12px rgba(240, 198, 116, 0.35));
+}
+
+.frame__title {
+  font-weight: 500;
+  letter-spacing: 0.3rem;
+  font-size: clamp(1.2rem, 2.8vw, 2.3rem);
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+.frame__price {
+  grid-area: price;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.frame__price-label {
+  font-size: clamp(1rem, 2vw, 1.4rem);
+  letter-spacing: 0.25rem;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.frame__price-value {
+  font-family: var(--font-numeric);
+  font-size: clamp(3rem, 12vw, 8rem);
+  margin: 0.2em 0;
+  transition: color 0.5s ease;
+}
+
+.frame__price-value.fade {
+  animation: priceFade 0.5s ease forwards;
+}
+
+.frame__price-value.up {
+  color: var(--color-up);
+}
+
+.frame__price-value.down {
+  color: var(--color-down);
+}
+
+.frame__currency {
+  font-size: clamp(1rem, 2.5vw, 1.6rem);
+  letter-spacing: 0.6rem;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.frame__change {
+  grid-area: change;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
+}
+
+.frame__change-label {
+  text-transform: uppercase;
+  font-size: clamp(0.9rem, 1.6vw, 1.2rem);
+  letter-spacing: 0.3rem;
+  opacity: 0.6;
+}
+
+.frame__change-value {
+  font-family: var(--font-numeric);
+  transition: color 0.5s ease;
+}
+
+.frame__footer {
+  grid-area: footer;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: clamp(0.8rem, 1.4vw, 1.1rem);
+  letter-spacing: 0.1rem;
+}
+
+.frame__status {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+}
+
+.frame__timestamp {
+  font-family: var(--font-numeric);
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+}
+
+@keyframes btcGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 14px var(--glow-color), 0 0 24px rgba(240, 198, 116, 0.25);
+  }
+  50% {
+    text-shadow: 0 0 25px rgba(240, 198, 116, 0.8), 0 0 60px rgba(240, 198, 116, 0.4);
+  }
+}
+
+@keyframes priceFade {
+  from {
+    opacity: 0.3;
+    transform: scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (max-aspect-ratio: 4/5) {
+  /* Ajustes para telas que não estejam em paisagem */
+  main.frame {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      'header'
+      'price'
+      'change'
+      'footer';
+    padding: 4vh 6vw;
+    text-align: center;
+  }
+
+  .frame__header,
+  .frame__change,
+  .frame__footer {
+    justify-content: center;
+  }
+
+  .frame__status {
+    align-items: center;
+  }
+}
+>>>>>>> parent of 178d4ac (feat: add support for multiple cryptocurrencies and improve UI controls)
