@@ -4,94 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="theme-color" content="#000000" />
-    <meta name="description" content="Bitcoin Frame - Painel Crypto" />
+    <meta name="description" content="Bitcoin Frame - Painel Crypto Minimalista" />
     <title>Bitcoin Frame</title>
 
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet" />
     
+    <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json" />
 
-    <style>
-        /* --- CSS (Estilos) --- */
-        html, body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-            background-color: #000;
-            font-family: 'Orbitron', sans-serif;
-            color: #fff;
-        }
-        .frame {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100vh;
-            padding: 2rem;
-            box-sizing: border-box;
-            animation: pixelShift 60s linear infinite; /* Proteção de tela */
-        }
-        .frame__header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-        }
-        .frame__branding { display: flex; align-items: center; gap: 1rem; }
-        .frame__logo { font-size: 2.5rem; color: #f7931a; text-shadow: 0 0 10px rgba(247, 147, 26, 0.5); }
-        .frame__title { font-size: 1.2rem; font-weight: 700; letter-spacing: 2px; margin: 0; color: #888; }
-        .frame__controls { display: flex; gap: 1rem; align-items: center; }
-        
-        /* Controles */
-        .control__select {
-            background: #1a1a1a; color: #fff; border: 1px solid #333;
-            padding: 0.5rem; border-radius: 4px; font-family: 'Roboto Mono', monospace;
-            font-size: 1rem; outline: none;
-        }
-        .pill-group { display: flex; background: #1a1a1a; border-radius: 4px; overflow: hidden; }
-        .pill {
-            background: none; border: none; color: #666; padding: 0.5rem 1rem;
-            cursor: pointer; font-family: 'Roboto Mono', monospace; font-weight: bold;
-        }
-        .pill.is-active { background: #333; color: #fff; }
-
-        /* Preço */
-        .frame__price { text-align: left; margin-top: 2rem; }
-        .frame__price-label { font-family: 'Roboto Mono', monospace; color: #666; margin: 0 0 0.5rem 0; font-size: 0.9rem; }
-        .frame__asset { font-size: 1.5rem; margin: 0; color: #f7931a; }
-        .frame__price-value {
-            font-size: 12vw; /* Grande e Responsivo */
-            font-weight: 700; margin: 0; line-height: 1.1;
-            transition: color 0.3s ease;
-        }
-        .frame__currency { font-size: 1.5rem; color: #444; margin: 0; }
-
-        /* Variação */
-        .frame__change {
-            text-align: right; position: absolute; right: 2rem; top: 50%; transform: translateY(-50%);
-        }
-        .frame__change-label { display: block; font-family: 'Roboto Mono', monospace; color: #666; font-size: 0.8rem; margin-bottom: 0.5rem; }
-        .frame__change-value { font-size: 2rem; font-weight: 700; }
-
-        .frame__footer {
-            display: flex; justify-content: space-between; font-family: 'Roboto Mono', monospace;
-            font-size: 0.8rem; color: #444; border-top: 1px solid #111; padding-top: 1rem;
-        }
-
-        /* Efeitos */
-        .price-up { color: #00ff88; text-shadow: 0 0 15px rgba(0, 255, 136, 0.3); }
-        .price-down { color: #ff4d4d; text-shadow: 0 0 15px rgba(255, 77, 77, 0.3); }
-        @keyframes pixelShift {
-            0% { transform: translate(0, 0); } 25% { transform: translate(1px, 1px); }
-            50% { transform: translate(-1px, 2px); } 75% { transform: translate(-2px, -1px); }
-            100% { transform: translate(0, 0); }
-        }
-        @media (max-width: 768px) {
-            .frame__price-value { font-size: 18vw; }
-            .frame__change { position: static; transform: none; text-align: left; margin-top: 1rem; }
-        }
-    </style>
+    <!-- Estilos Externos -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/theme-minimal.css" />
 </head>
 <body class="theme-minimal">
     <main class="frame" role="main">
@@ -102,7 +28,7 @@
             </div>
             <div class="frame__controls">
                 <div class="control">
-                    <select id="coin-select" class="control__select"></select>
+                    <select id="coin-select" class="control__select" aria-label="Selecionar Criptomoeda"></select>
                 </div>
                 <div class="control">
                     <div id="currency-toggle" class="pill-group">
@@ -115,114 +41,40 @@
 
         <section class="frame__price">
             <p class="frame__price-label">Cotação agora</p>
-            <p id="coin-label" class="frame__asset">BTC</p>
-            <p id="btc-price" class="frame__price-value" data-value="0">--</p>
-            <p id="btc-currency" class="frame__currency">BRL</p>
+            <h2 id="coin-label" class="frame__asset">--</h2>
+            <p id="btc-price" class="frame__price-value" data-value="0">...</p>
+            <p id="btc-currency" class="frame__currency">--</p>
         </section>
 
-        <section class="frame__change">
-            <span class="frame__change-label">24h</span>
+        <section class="frame__change" aria-live="polite">
+            <span class="frame__change-label">Variação 24h</span>
             <span id="btc-change" class="frame__change-value">--</span>
         </section>
 
         <footer class="frame__footer">
             <div class="frame__status">
-                <span id="last-update" class="frame__timestamp">Carregando...</span>
-                <span class="frame__status-text">Atualizado em tempo real</span>
+                <span id="last-update" class="frame__timestamp">Sincronizando...</span>
+                <span class="frame__status-text"> • Atualizado em tempo real</span>
             </div>
         </footer>
     </main>
 
+    <!-- Scripts do Projeto -->
+    <script src="js/config.js"></script>
+    <script src="js/utils/quote-utils.js"></script>
+    <script src="js/effects.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+
+    <!-- Service Worker Registration -->
     <script>
-        // --- CONFIGURAÇÃO ---
-        const config = {
-            REFRESH_INTERVAL: 5000,
-            DEFAULT_CURRENCY: 'brl',
-            DEFAULT_COIN: 'bitcoin',
-            AVAILABLE_COINS: [
-                { id: 'bitcoin', symbol: 'BTC', name: 'Bitcoin' },
-                { id: 'ethereum', symbol: 'ETH', name: 'Ethereum' },
-                { id: 'solana', symbol: 'SOL', name: 'Solana' },
-                { id: 'ripple', symbol: 'XRP', name: 'XRP' }
-            ]
-        };
-
-        // --- LÓGICA PRINCIPAL ---
-        document.addEventListener('DOMContentLoaded', () => {
-            let currentCoin = config.DEFAULT_COIN;
-            let currentCurrency = config.DEFAULT_CURRENCY;
-            
-            const els = {
-                select: document.getElementById('coin-select'),
-                price: document.getElementById('btc-price'),
-                change: document.getElementById('btc-change'),
-                time: document.getElementById('last-update'),
-                label: document.getElementById('coin-label'),
-                currency: document.getElementById('btc-currency'),
-                pills: document.querySelectorAll('.pill')
-            };
-
-            // 1. Preencher Select
-            config.AVAILABLE_COINS.forEach(c => {
-                const opt = document.createElement('option');
-                opt.value = c.id; opt.textContent = c.name;
-                if(c.id === currentCoin) opt.selected = true;
-                els.select.appendChild(opt);
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('[PWA] Service Worker registrado com sucesso.'))
+                    .catch(err => console.warn('[PWA] Falha ao registrar Service Worker:', err));
             });
-
-            // 2. Buscar Dados
-            async function fetchData() {
-                try {
-                    const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=${currentCoin}&vs_currencies=${currentCurrency}&include_24hr_change=true`);
-                    if(!res.ok) throw new Error('Erro API');
-                    const data = await res.json();
-                    return { price: data[currentCoin][currentCurrency], change: data[currentCoin][`${currentCurrency}_24h_change`] };
-                } catch (e) { console.error(e); return null; }
-            }
-
-            // 3. Atualizar Tela
-            async function update() {
-                const data = await fetchData();
-                if(!data) return;
-
-                const oldPrice = parseFloat(els.price.dataset.value) || 0;
-                
-                // Cor
-                els.price.classList.remove('price-up', 'price-down');
-                if(data.price > oldPrice && oldPrice !== 0) els.price.classList.add('price-up');
-                else if(data.price < oldPrice && oldPrice !== 0) els.price.classList.add('price-down');
-
-                // Valores
-                els.price.dataset.value = data.price;
-                els.price.innerText = data.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                els.change.innerText = `${data.change > 0 ? '+' : ''}${data.change.toFixed(2)}%`;
-                els.change.style.color = data.change >= 0 ? '#00ff88' : '#ff4d4d';
-                
-                // Labels
-                const coinObj = config.AVAILABLE_COINS.find(c => c.id === currentCoin);
-                els.label.innerText = coinObj ? coinObj.symbol : '---';
-                els.currency.innerText = currentCurrency.toUpperCase();
-                els.time.innerText = new Date().toLocaleTimeString();
-            }
-
-            // 4. Eventos
-            els.select.addEventListener('change', (e) => { currentCoin = e.target.value; update(); });
-            els.pills.forEach(p => p.addEventListener('click', () => {
-                document.querySelector('.pill.is-active').classList.remove('is-active');
-                p.classList.add('is-active');
-                currentCurrency = p.dataset.currency;
-                update();
-            }));
-
-            // Iniciar
-            update();
-            setInterval(update, config.REFRESH_INTERVAL);
-
-            // Tentar registrar SW (apenas se o arquivo existir na raiz)
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js').catch(() => console.log('SW não encontrado ou erro de HTTPS, ignorando...'));
-            }
-        });
+        }
     </script>
 </body>
 </html>

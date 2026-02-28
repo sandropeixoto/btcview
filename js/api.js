@@ -1,4 +1,4 @@
-const BTCViewAPI = {
+window.BTCViewAPI = {
     async fetchPrice(coinId, currency) {
         try {
             // URL da CoinGecko (Gratuita)

@@ -1,12 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Verifica se as dependências foram carregadas
     if (!window.BTCViewConfig || !window.BTCViewAPI) {
-        console.error("Config ou API não carregaram corretamente.");
+        console.error("Dependências críticas (Config ou API) não carregaram.");
         return;
     }
 
     const config = window.BTCViewConfig;
     const api = window.BTCViewAPI;
+    const utils = window.BTCViewUtils;
+    const effects = window.Effects;
     
     let currentCoin = config.DEFAULT_COIN;
     let currentCurrency = config.DEFAULT_CURRENCY;
@@ -29,57 +31,74 @@ document.addEventListener('DOMContentLoaded', () => {
         coinSelect.appendChild(option);
     });
 
-    // 2. Função de Atualização
+    /**
+     * Atualiza o painel com novos dados da API.
+     */
     async function updateDashboard() {
-        const data = await api.fetchPrice(currentCoin, currentCurrency);
-        
-        if (data) {
-            const oldPrice = parseFloat(priceDisplay.dataset.value) || 0;
+        try {
+            const data = await api.fetchPrice(currentCoin, currentCurrency);
             
-            // Efeito visual (Verde/Vermelho)
-            priceDisplay.classList.remove('price-up', 'price-down');
-            if (data.price > oldPrice && oldPrice !== 0) {
-                priceDisplay.classList.add('price-up');
-            } else if (data.price < oldPrice && oldPrice !== 0) {
-                priceDisplay.classList.add('price-down');
+            if (data) {
+                const oldPrice = parseFloat(priceDisplay.dataset.value) || 0;
+                const direction = utils ? utils.getDirection(data.price, oldPrice) : 'neutral';
+                
+                // Feedback Visual de Preço (Fade + Cor)
+                if (effects) {
+                    effects.applyPriceEffect(priceDisplay, direction);
+                } else {
+                    priceDisplay.classList.remove('price-up', 'price-down');
+                    if (direction === 'up') priceDisplay.classList.add('price-up');
+                    else if (direction === 'down') priceDisplay.classList.add('price-down');
+                }
+
+                // Atualiza Valor Numérico
+                priceDisplay.dataset.value = data.price;
+                priceDisplay.innerText = data.price.toLocaleString(currentCurrency === 'brl' ? 'pt-BR' : 'en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                });
+
+                // Labels de Identificação
+                const coinObj = config.AVAILABLE_COINS.find(c => c.id === currentCoin);
+                coinLabel.innerText = coinObj ? coinObj.symbol : '---';
+                currencyLabel.innerText = currentCurrency.toUpperCase();
+                
+                // Atualiza Variação 24h
+                const changeVal = data.change || 0;
+                const changeDir = utils ? utils.getChangeDirection(changeVal) : (changeVal >= 0 ? 'up' : 'down');
+                
+                changeDisplay.innerText = utils ? utils.formatPercentage(changeVal) : `${changeVal > 0 ? '+' : ''}${changeVal.toFixed(2)}%`;
+                
+                if (effects) {
+                    effects.applyChangeBadge(changeDisplay, changeDir);
+                } else {
+                    changeDisplay.style.color = changeVal >= 0 ? '#00ff88' : '#ff4d4d';
+                }
+                
+                // Timestamp
+                timestampDisplay.innerText = new Date().toLocaleTimeString();
             }
-
-            // Atualiza Textos
-            priceDisplay.dataset.value = data.price;
-            priceDisplay.innerText = data.price.toLocaleString('pt-BR', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
-
-            const coinObj = config.AVAILABLE_COINS.find(c => c.id === currentCoin);
-            coinLabel.innerText = coinObj ? coinObj.symbol : '---';
-            currencyLabel.innerText = currentCurrency.toUpperCase();
-            
-            // Atualiza Porcentagem
-            const changeVal = data.change || 0;
-            changeDisplay.innerText = `${changeVal > 0 ? '+' : ''}${changeVal.toFixed(2)}%`;
-            changeDisplay.style.color = changeVal >= 0 ? '#00ff88' : '#ff4d4d';
-            
-            // Atualiza Hora
-            timestampDisplay.innerText = new Date().toLocaleTimeString();
-        } else {
-            console.log("Tentando reconectar...");
+        } catch (error) {
+            console.error("Erro no ciclo de atualização:", error);
+            timestampDisplay.innerText = "Erro de conexão";
         }
     }
 
-    // 3. Event Listeners (Cliques e Trocas)
+    // 3. Event Listeners
     
-    // Troca de Moeda (Dropdown)
+    // Troca de Moeda Ativa
     coinSelect.addEventListener('change', (e) => {
         currentCoin = e.target.value;
-        priceDisplay.innerText = "..."; // Feedback visual de carregamento
+        priceDisplay.innerText = "...";
         updateDashboard();
     });
 
-    // Troca de Moeda (BRL/USD)
+    // Troca BRL/USD
     currencyButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-            document.querySelector('.pill.is-active').classList.remove('is-active');
+            const activePill = document.querySelector('.pill.is-active');
+            if (activePill) activePill.classList.remove('is-active');
+            
             btn.classList.add('is-active');
             currentCurrency = btn.dataset.currency;
             priceDisplay.innerText = "..."; 
@@ -87,23 +106,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Fullscreen ao clicar na tela
-    document.addEventListener('click', () => {
-        if (!document.fullscreenElement && document.documentElement.requestFullscreen) {
-            document.documentElement.requestFullscreen().catch(err => {
-                // Ignora erro se o usuário negar ou navegador não suportar
-            });
+    // Modo Imersivo (Fullscreen)
+    document.addEventListener('click', (e) => {
+        // Evita fullscreen ao clicar em controles
+        if (e.target.closest('.frame__controls')) return;
+
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen().catch(() => {});
+        } else if (document.exitFullscreen) {
+            // Opcional: permitir sair do fullscreen clicando novamente
+            // document.exitFullscreen();
         }
     });
 
-    // 4. Iniciar Loop
+    // 4. Ciclo Inicial
     updateDashboard();
     setInterval(updateDashboard, config.REFRESH_INTERVAL);
 });
 
-// Registro do Service Worker (Se existir o arquivo sw.js)
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW falhou:', err));
-    });
-}
+// Service Worker (Opcional - Verificação de existência resolvida no HTML)

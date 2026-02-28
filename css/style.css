@@ -16,6 +16,7 @@ html, body {
     height: 100vh;
     padding: 2rem;
     box-sizing: border-box;
+    animation: pixelShift 60s linear infinite; /* Proteção de tela (Burn-in) */
 }
 
 /* Header & Controles */
@@ -61,7 +62,7 @@ html, body {
     font-family: 'Roboto Mono', monospace;
     font-size: 1rem;
     outline: none;
-    min-width: 120px; /* Garante que não fique invisível */
+    min-width: 120px;
 }
 
 /* Botões USD/BRL */
@@ -80,6 +81,7 @@ html, body {
     cursor: pointer;
     font-family: 'Roboto Mono', monospace;
     font-weight: bold;
+    transition: all 0.2s ease;
 }
 
 .pill.is-active {
@@ -106,7 +108,7 @@ html, body {
 }
 
 .frame__price-value {
-    font-size: 6vw; /* Responsivo */
+    font-size: 10vw; /* Responsivo e grande */
     font-weight: 700;
     margin: 0;
     line-height: 1.1;
@@ -152,12 +154,28 @@ html, body {
     padding-top: 1rem;
 }
 
-/* Feedback de Preço */
-.price-up { color: #00ff88; text-shadow: 0 0 15px rgba(0, 255, 136, 0.3); }
-.price-down { color: #ff4d4d; text-shadow: 0 0 15px rgba(255, 77, 77, 0.3); }
+/* Feedback de Preço & Animações */
+.price-up, .up { color: #00ff88; text-shadow: 0 0 15px rgba(0, 255, 136, 0.3); }
+.price-down, .down { color: #ff4d4d; text-shadow: 0 0 15px rgba(255, 77, 77, 0.3); }
+
+.fade { animation: fadeEffect 0.5s ease; }
+
+@keyframes fadeEffect {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+@keyframes pixelShift {
+    0% { transform: translate(0, 0); }
+    25% { transform: translate(1px, 1px); }
+    50% { transform: translate(-1px, 2px); }
+    75% { transform: translate(-2px, -1px); }
+    100% { transform: translate(0, 0); }
+}
 
 /* Responsividade Mobile */
 @media (max-width: 768px) {
-    .frame__price-value { font-size: 15vw; }
+    .frame__price-value { font-size: 18vw; }
     .frame__change { position: static; transform: none; text-align: left; margin-top: 2rem; }
+    .frame { padding: 1.5rem; }
 }
